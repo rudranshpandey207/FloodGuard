@@ -1,0 +1,90 @@
+{
+  "models": {
+    "LogisticRegression": {
+      "accuracy": 0.9304,
+      "precision": 0.9429,
+      "recall": 0.9304,
+      "f1_score": 0.9341,
+      "training_time_sec": 2.28,
+      "model_type": "Linear / Multinomial",
+      "description": "Baseline linear classifier with L2 regularization and balanced class weights"
+    },
+    "RandomForest": {
+      "accuracy": 0.9897,
+      "precision": 0.9901,
+      "recall": 0.9897,
+      "f1_score": 0.9898,
+      "training_time_sec": 1.047,
+      "model_type": "Ensemble (Bagging)",
+      "description": "150 Decision Trees with out-of-bag feature randomization and balanced subsampling"
+    },
+    "XGBoost": {
+      "accuracy": 0.992,
+      "precision": 0.992,
+      "recall": 0.992,
+      "f1_score": 0.992,
+      "training_time_sec": 5.884,
+      "model_type": "Ensemble (Gradient Boosted Trees)",
+      "description": "Sequential gradient boosted decision trees optimizing multi-class log-loss"
+    }
+  },
+  "champion_model": "XGBoost",
+  "feature_importances": {
+    "rainfall_7d_mm": 0.2902,
+    "upstream_discharge_cusecs": 0.2538,
+    "stage_to_warning_ratio": 0.1398,
+    "rainfall_72h_mm": 0.1258,
+    "drainage_strain_index": 0.0514,
+    "stage_to_danger_ratio": 0.0464,
+    "soil_moisture_index": 0.0413,
+    "water_level_rate_of_rise_m_hr": 0.0263,
+    "rainfall_24h_mm": 0.0039,
+    "river_water_level_m": 0.0038,
+    "drainage_capacity": 0.0037,
+    "rainfall_1h_mm": 0.0033,
+    "humidity_pct": 0.0033,
+    "runoff_potential_index": 0.0028,
+    "temperature_c": 0.0023,
+    "elevation_m": 0.0019
+  },
+  "feature_columns": [
+    "rainfall_1h_mm",
+    "rainfall_24h_mm",
+    "rainfall_72h_mm",
+    "rainfall_7d_mm",
+    "river_water_level_m",
+    "water_level_rate_of_rise_m_hr",
+    "soil_moisture_index",
+    "upstream_discharge_cusecs",
+    "elevation_m",
+    "drainage_capacity",
+    "temperature_c",
+    "humidity_pct",
+    "stage_to_warning_ratio",
+    "stage_to_danger_ratio",
+    "runoff_potential_index",
+    "drainage_strain_index"
+  ],
+  "target_mapping": {
+    "0": {
+      "label": "Low",
+      "color": "#10B981",
+      "action": "Routine hydrologic monitoring"
+    },
+    "1": {
+      "label": "Medium",
+      "color": "#F59E0B",
+      "action": "Increased sensor polling, inspect low-lying catchments"
+    },
+    "2": {
+      "label": "High",
+      "color": "#F97316",
+      "action": "Flood defense activation, prepare temporary diversion bunds"
+    },
+    "3": {
+      "label": "Critical",
+      "color": "#EF4444",
+      "action": "Immediate emergency response mobilization, priority evacuation alerts"
+    }
+  }
+}

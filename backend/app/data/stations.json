@@ -1,0 +1,182 @@
+{
+  "stations": [
+    {
+      "station_id": "STN_YAM_01",
+      "station_name": "Yamuna - Old Railway Bridge (Delhi)",
+      "river": "Yamuna",
+      "state": "Delhi NCR",
+      "latitude": 28.6635,
+      "longitude": 77.2478,
+      "elevation_m": 204.0,
+      "warning_level_m": 204.50,
+      "danger_level_m": 205.33,
+      "drainage_capacity": 0.45,
+      "current_telemetry": {
+        "river_water_level_m": 205.15,
+        "water_level_rate_of_rise_m_hr": 0.08,
+        "rainfall_1h_mm": 18.5,
+        "rainfall_24h_mm": 84.0,
+        "rainfall_72h_mm": 172.5,
+        "rainfall_7d_mm": 245.0,
+        "soil_moisture_index": 0.88,
+        "upstream_discharge_cusecs": 245000,
+        "temperature_c": 27.5,
+        "humidity_pct": 92.0,
+        "risk_level": 2,
+        "risk_label": "High"
+      },
+      "historical_flood_events": [
+        {"year": 2023, "peak_level_m": 208.66, "notes": "All-time record flood; Red Fort perimeter inundated"},
+        {"year": 2013, "peak_level_m": 207.32, "notes": "Hathnikund barrage released 800,000 cusecs"},
+        {"year": 1978, "peak_level_m": 207.49, "notes": "Historic Delhi flood breaching ring bunds"}
+      ]
+    },
+    {
+      "station_id": "STN_YAM_02",
+      "station_name": "Yamuna - Okhla Barrage (Noida/Delhi)",
+      "river": "Yamuna",
+      "state": "Uttar Pradesh / Delhi",
+      "latitude": 28.5448,
+      "longitude": 77.3069,
+      "elevation_m": 198.5,
+      "warning_level_m": 199.50,
+      "danger_level_m": 200.60,
+      "drainage_capacity": 0.50,
+      "current_telemetry": {
+        "river_water_level_m": 199.85,
+        "water_level_rate_of_rise_m_hr": 0.05,
+        "rainfall_1h_mm": 12.0,
+        "rainfall_24h_mm": 62.0,
+        "rainfall_72h_mm": 135.0,
+        "rainfall_7d_mm": 198.0,
+        "soil_moisture_index": 0.82,
+        "upstream_discharge_cusecs": 210000,
+        "temperature_c": 28.0,
+        "humidity_pct": 89.0,
+        "risk_level": 2,
+        "risk_label": "High"
+      },
+      "historical_flood_events": [
+        {"year": 2023, "peak_level_m": 201.10, "notes": "Kalindi Kunj & Noida floodplain farm submergence"},
+        {"year": 2019, "peak_level_m": 200.40, "notes": "Controlled barrage discharge to downstream"}
+      ]
+    },
+    {
+      "station_id": "STN_HIN_01",
+      "station_name": "Hindon - Ghaziabad Barrage",
+      "river": "Hindon",
+      "state": "Uttar Pradesh",
+      "latitude": 28.6508,
+      "longitude": 77.4124,
+      "elevation_m": 208.0,
+      "warning_level_m": 209.00,
+      "danger_level_m": 210.20,
+      "drainage_capacity": 0.40,
+      "current_telemetry": {
+        "river_water_level_m": 208.20,
+        "water_level_rate_of_rise_m_hr": 0.02,
+        "rainfall_1h_mm": 4.5,
+        "rainfall_24h_mm": 28.0,
+        "rainfall_72h_mm": 65.0,
+        "rainfall_7d_mm": 92.0,
+        "soil_moisture_index": 0.60,
+        "upstream_discharge_cusecs": 35000,
+        "temperature_c": 29.5,
+        "humidity_pct": 74.0,
+        "risk_level": 1,
+        "risk_label": "Medium"
+      },
+      "historical_flood_events": [
+        {"year": 2023, "peak_level_m": 210.85, "notes": "Karhera colony evacuated; hundreds of vehicles submerged"}
+      ]
+    },
+    {
+      "station_id": "STN_HIN_02",
+      "station_name": "Hindon - Noida Sector 135 Floodplain",
+      "river": "Hindon",
+      "state": "Uttar Pradesh",
+      "latitude": 28.4985,
+      "longitude": 77.4012,
+      "elevation_m": 195.0,
+      "warning_level_m": 196.20,
+      "danger_level_m": 197.50,
+      "drainage_capacity": 0.55,
+      "current_telemetry": {
+        "river_water_level_m": 195.40,
+        "water_level_rate_of_rise_m_hr": 0.01,
+        "rainfall_1h_mm": 2.0,
+        "rainfall_24h_mm": 18.0,
+        "rainfall_72h_mm": 45.0,
+        "rainfall_7d_mm": 70.0,
+        "soil_moisture_index": 0.52,
+        "upstream_discharge_cusecs": 28000,
+        "temperature_c": 30.0,
+        "humidity_pct": 70.0,
+        "risk_level": 0,
+        "risk_label": "Low"
+      },
+      "historical_flood_events": [
+        {"year": 2023, "peak_level_m": 198.15, "notes": "Extensive inundation of commercial farmhouses and cattle shelters"}
+      ]
+    },
+    {
+      "station_id": "STN_GAN_01",
+      "station_name": "Ganga - Haridwar Bhimgoda Barrage",
+      "river": "Ganga",
+      "state": "Uttarakhand",
+      "latitude": 29.9576,
+      "longitude": 78.1728,
+      "elevation_m": 294.0,
+      "warning_level_m": 293.00,
+      "danger_level_m": 294.00,
+      "drainage_capacity": 0.70,
+      "current_telemetry": {
+        "river_water_level_m": 292.10,
+        "water_level_rate_of_rise_m_hr": -0.02,
+        "rainfall_1h_mm": 0.5,
+        "rainfall_24h_mm": 12.0,
+        "rainfall_72h_mm": 35.0,
+        "rainfall_7d_mm": 60.0,
+        "soil_moisture_index": 0.45,
+        "upstream_discharge_cusecs": 75000,
+        "temperature_c": 24.0,
+        "humidity_pct": 65.0,
+        "risk_level": 0,
+        "risk_label": "Low"
+      },
+      "historical_flood_events": [
+        {"year": 2013, "peak_level_m": 296.20, "notes": "Kedarnath disaster downstream impact; massive siltation"},
+        {"year": 2010, "peak_level_m": 295.10, "notes": "Major upper Ganga flood inundating ghats"}
+      ]
+    },
+    {
+      "station_id": "STN_GAN_02",
+      "station_name": "Ganga - Prayagraj Sangam",
+      "river": "Ganga",
+      "state": "Uttar Pradesh",
+      "latitude": 25.4358,
+      "longitude": 81.8463,
+      "elevation_m": 84.0,
+      "warning_level_m": 83.73,
+      "danger_level_m": 84.73,
+      "drainage_capacity": 0.65,
+      "current_telemetry": {
+        "river_water_level_m": 82.50,
+        "water_level_rate_of_rise_m_hr": 0.01,
+        "rainfall_1h_mm": 1.0,
+        "rainfall_24h_mm": 15.0,
+        "rainfall_72h_mm": 40.0,
+        "rainfall_7d_mm": 75.0,
+        "soil_moisture_index": 0.48,
+        "upstream_discharge_cusecs": 120000,
+        "temperature_c": 31.0,
+        "humidity_pct": 68.0,
+        "risk_level": 0,
+        "risk_label": "Low"
+      },
+      "historical_flood_events": [
+        {"year": 2021, "peak_level_m": 85.25, "notes": "Bada Hanuman temple submerged; low-lying colonies evacuated"}
+      ]
+    }
+  ]
+}
