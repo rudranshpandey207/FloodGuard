@@ -1,6 +1,6 @@
 # FloodGuard: An Agentic AI-Based Flood Risk Assessment & Emergency Response Decision Support System
 
-> **Current project status:** See [CURRENT_STATUS.md](CURRENT_STATUS.md) for the implemented baseline, known limitations, real-data recommendation, use-case comparison, and prioritized next steps. See [PHASES.md](PHASES.md) for the delivery plan and [CHANGELOG.md](CHANGELOG.md) for the rationale and usage of material project changes.
+> **Documentation:** [TECHNICAL_DOCUMENTATION.md](TECHNICAL_DOCUMENTATION.md) is the complete implementation and architecture reference; [DEMO_GUIDE.md](DEMO_GUIDE.md) is the presentation/viva script; [CURRENT_STATUS.md](CURRENT_STATUS.md) records scope and limitations; [PHASES.md](PHASES.md) records delivery phases; [CHANGELOG.md](CHANGELOG.md) records every material change; [FINAL_EVALUATION.md](FINAL_EVALUATION.md) is the academic evaluation handoff.
 
 > **Major Project Part-1 (15B19CI791)**  
 > **Program:** B.Tech (CSE / ECS / ECE) — 7th Semester / 4th Year (2026–2027)  
@@ -22,7 +22,7 @@ FloodGuard bridges this gap by combining:
 2. **Model Context Protocol (MCP) Tool Architecture**: An open, auditable interface giving the AI system strictly bounded access to environmental telemetry, historical breach records, and predictive models.
 3. **Autonomous Flood Intelligence Agent (ReAct Framework)**: An autonomous reasoning agent that formulates multi-step investigation plans, dynamically invokes MCP tools, and synthesizes evidence-grounded reports.
 4. **Human-in-the-Loop Safety & Policy Filter**: Strict adherence to disaster-management ethics; the AI provides non-binding decision support and does not autonomously issue legally binding evacuation orders.
-5. **Modern Full-Stack Dashboard (MERN + FastAPI)**: High-performance architecture combining a Python prediction/agent microservice with a Node.js/Express + MongoDB persistence layer and an interactive React + Vite operational dashboard.
+5. **Modern Full-Stack Dashboard**: High-performance architecture combining a Python prediction/agent microservice, SQLite persistence for incidents/chat, and an interactive React + Vite operational dashboard.
 
 ---
 
@@ -94,7 +94,7 @@ FloodGuard bridges this gap by combining:
 | **Prediction Service** | FastAPI, Uvicorn, Pydantic | High-throughput, asynchronous REST API serving live ML model inference and feature attribution. |
 | **Tool Protocol** | Model Context Protocol (MCP) | Industry-standard typed interface decoupling the language model from direct database manipulation. |
 | **Agentic AI** | ReAct Pattern (Reason + Act), Google GenAI SDK | Autonomous multi-step planning, dynamic tool invocation, and grounded explanation synthesis. |
-| **App Backend & DB** | Node.js, Express.js, MongoDB (MERN) | Manages authentication, incident logs, persistent alert subscriptions, and session history. |
+| **Persistence & Audit** | SQLite | Stores incidents, incident audits, chat sessions, and chat messages in the local prototype. |
 | **Frontend UI** | React.js (v18+), Vite, Vanilla CSS Design System | Ultra-fast local development (ESM), interactive geospatial maps, animated telemetry gauges, and agent trace drawer. |
 | **Mapping & Charts** | Leaflet, React-Leaflet, Chart.js / SVG Gauges | Visualizing river basins, floodplains, danger mark thresholds, and sensor curves. |
 
@@ -239,6 +239,32 @@ python -m pytest backend\tests -q
 ```
 
 Expected result: `7 passed`.
+
+### Docker Phase 5 startup — one command
+
+From the project root:
+
+```powershell
+.\start-demo.ps1
+```
+
+The script checks Docker, builds and starts both containers, and opens the frontend automatically.
+
+Or run Docker manually:
+
+### Docker Phase 5 startup
+
+```powershell
+cd C:\Users\ishan\Desktop\flood\FloodGuard
+docker compose up --build
+```
+
+- Frontend: `http://localhost:5173`
+- Backend: `http://localhost:8000`
+- API documentation: `http://localhost:8000/docs`
+
+Docker remains an optional local/demo deployment baseline. If Docker Desktop is not running, use the direct backend and frontend commands below; Docker is not required for the major-project evaluation.
+Authentication, production secrets, public alert delivery, real gauge feeds, and real-data validation remain outside the current academic-demonstration scope.
 
 ### Troubleshooting duplicate local servers
 

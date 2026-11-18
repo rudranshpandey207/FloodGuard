@@ -1,6 +1,6 @@
 # FloodGuard — Delivery Phases
 
-This file is the execution plan for completing the synthetic-data demonstration application. **Phase 1 is complete**, **Phase 2 is complete**, **Phase 3 is complete**, and the current work is **Phase 4**.
+This file is the execution plan for completing the synthetic-data demonstration application. **Phase 1 is complete**, **Phase 2 is complete**, **Phase 3 is complete**, **Phase 4 is complete**, and **Phase 5 has an evaluation-ready local-delivery baseline**. Remaining Phase 5 items are production-only work and are not required to demonstrate the academic prototype.
 
 ## Phase 1 — Stabilize the Existing Foundation
 
