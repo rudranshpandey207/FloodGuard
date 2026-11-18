@@ -2,6 +2,57 @@
 
 This log records material repository changes, why they were needed, and how they are used. It is intentionally written for the project team and future maintainers rather than as a generated package release log.
 
+## 2026-11-18 — Complete technical and demonstration documentation
+
+### Added `TECHNICAL_DOCUMENTATION.md`
+
+- **What changed:** Added a complete architecture, technology, ML, API, MCP, persistence, Docker, safety, limitations, and future-scope reference.
+- **Why it was necessary:** The project required one thorough document for evaluation, viva preparation, maintenance, and architectural handoff.
+- **How it is used:** Use it to explain implementation, data flow, model decisions, and operational boundaries.
+
+### Added `DEMO_GUIDE.md`
+
+- **What changed:** Added a timed presentation sequence, exact UI actions, viva talking points, likely questions, pre-presentation checks, and Docker/direct startup alternatives.
+- **Why it was necessary:** The team needed a repeatable way to demonstrate all major features without missing or overclaiming functionality.
+- **How it is used:** Follow it from start-demo launch through AI/incident demonstration.
+
+### Documentation corrections
+
+- **What changed:** Corrected the root README and current status to distinguish implemented SQLite/FastAPI/React capabilities from earlier planned Node/MongoDB architecture.
+- **Why it was necessary:** Previous architecture text could imply that authentication and MongoDB persistence were already implemented when they were still future work.
+
+## 2026-11-18 — One-command Docker demo launcher
+
+### Added `start-demo.ps1`
+
+- **What changed:** Added a PowerShell launcher that checks Docker, builds/starts Compose services in detached mode, prints URLs, and opens the frontend.
+- **Why it was necessary:** Docker startup previously required separate build/start and browser commands.
+- **How it is used:** From the project root, run `.\start-demo.ps1`.
+- **Validation:** Docker Desktop engine is running; Compose backend and frontend containers started successfully on ports `8000` and `5173`.
+
+## 2026-11-18 — Major-project evaluation finalization
+
+### Added `FINAL_EVALUATION.md`
+
+- **What changed:** Added an evaluation-ready scope, recommended demonstration sequence, startup commands, verification commands, and explicit non-operational limitations.
+- **Why it was necessary:** Docker Desktop is optional and may not run on the evaluator machine. The project needed a definitive academic-demonstration baseline that does not depend on Docker.
+- **How it is used:** Follow this file before the final presentation or viva.
+
+### Final scope decision
+
+- Docker is retained as an optional Phase 5 deployment asset, not as a required evaluation dependency.
+- Direct FastAPI and Vite startup are the supported evaluation path.
+- Official CWC/WRIS live gauge/discharge integration remains future work.
+- Real-data retraining and operational validation remain future work.
+
+## 2026-11-18 — Phase 5 Docker startup started
+
+### Added Docker deployment baseline
+
+- **What changed:** Added `backend/Dockerfile`, `frontend/Dockerfile`, `docker-compose.yml`, and `.dockerignore`.
+- **Why it was necessary:** Phase 5 needs a reproducible demo startup separate from manually managed local terminals.
+- **How it is used:** Run `docker compose up --build` from the project root. Backend is published on port `8000`; frontend is published on port `5173`.
+
 ## 2026-11-18 — Phase 4 incident workflow
 
 ### Added `backend/app/api/routes_incidents.py`

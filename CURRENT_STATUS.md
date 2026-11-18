@@ -5,7 +5,7 @@
 **Repository state:** Academic prototype / local development  
 **Current operational posture:** Demonstrable offline-first dashboard backed by a local FastAPI service; not ready for real emergency operations
 
-**Delivery phase:** Phase 4 — Agent, Alerts, and Incident Workflow (**in progress**); Phase 1 (**complete**); Phase 2 (**complete**); Phase 3 (**complete**)
+**Delivery phase:** Ready for major-project evaluation (**synthetic-data academic prototype**). Phase 1–4 are complete; Phase 5 has a reproducible local and optional Docker baseline. Production authentication, real gauge feeds, formal security review, and real-data validation remain future work.
 
 Phase execution details are maintained in [PHASES.md](PHASES.md), and implementation rationale is maintained in [CHANGELOG.md](CHANGELOG.md).
 
@@ -64,6 +64,12 @@ Implemented routes include:
 | `GET /api/alerts/recommendations/{risk_level}` | Preparedness recommendations | MCP tools |
 | `POST /api/agent/query` | Agentic flood assessment | ReAct-style orchestrator |
 | `GET /api/agent/tools` | Registered MCP tools | MCP registry |
+| `GET /api/integrations/weather/{station_id}` | Open-Meteo rolling weather preview | Public Open-Meteo API |
+| `POST /api/incidents` | Create a human-managed incident | SQLite |
+| `GET /api/incidents/{incident_id}` | Incident detail and audit timeline | SQLite |
+| `PATCH /api/incidents/{incident_id}` | Investigate, acknowledge, or resolve incident | SQLite |
+| `POST /api/chat/sessions` | Create persistent chat session | SQLite |
+| `GET /api/chat/sessions/{session_id}/messages` | Retrieve chat history | SQLite |
 
 The backend has permissive CORS for local development and is intended to run on port `8000`.
 
@@ -116,15 +122,27 @@ Implemented with React 18 and Vite:
   - Agent API integration
   - Offline fallback response
   - Human-oversight notice
+  - Persistent chat session/messages
+  - Gemini/offline synthesis label
+- Scenario Lab
+  - Baseline versus simulated prediction
+  - 16-feature override inputs
+  - Open-Meteo weather preview
+  - Local scenario history and JSON export
+- Incidents
+  - SQLite incident creation and listing
+  - Human lifecycle controls
+  - Approval confirmation
+  - Incident detail and audit timeline
 
 The frontend has demo-data fallback so it can be previewed even when FastAPI is stopped. It builds successfully with `npm run build`.
 
 **Current frontend limitations:**
 
-- The map is a styled operational visualization, not yet a real Leaflet/Mapbox geospatial map.
-- The telemetry chart is currently illustrative SVG data rather than a historical time-series API.
-- Export, station-details, filter, refresh, map zoom, and “View all alerts” controls are primarily presentation controls.
-- The “What-if” simulator described in the original roadmap is not yet implemented.
+- Official CWC/WRIS river gauge and barrage discharge data are not connected.
+- The synthetic history chart is demonstration data, not observed official telemetry.
+- Authentication and role-based authorization are not implemented.
+- Production notification delivery and real official incident escalation are not implemented.
 
 ### Gemini and Phase 2 alert/report increment
 
