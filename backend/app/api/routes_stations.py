@@ -6,7 +6,7 @@ import os
 import json
 from typing import Dict, Any, List, Optional
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, Field
 
 router = APIRouter(prefix="/api/stations", tags=["Stations & Telemetry"])
 
@@ -24,13 +24,15 @@ def _save_stations(stations):
 
 
 class TelemetryUpdate(BaseModel):
-    rainfall_1h_mm: Optional[float] = None
-    rainfall_24h_mm: Optional[float] = None
-    rainfall_72h_mm: Optional[float] = None
+    model_config = ConfigDict(extra="forbid")
+
+    rainfall_1h_mm: Optional[float] = Field(default=None, ge=0)
+    rainfall_24h_mm: Optional[float] = Field(default=None, ge=0)
+    rainfall_72h_mm: Optional[float] = Field(default=None, ge=0)
     river_water_level_m: Optional[float] = None
     water_level_rate_of_rise_m_hr: Optional[float] = None
-    soil_moisture_index: Optional[float] = None
-    upstream_discharge_cusecs: Optional[float] = None
+    soil_moisture_index: Optional[float] = Field(default=None, ge=0, le=1)
+    upstream_discharge_cusecs: Optional[float] = Field(default=None, ge=0)
 
 
 @router.get("", response_model=List[Dict[str, Any]])

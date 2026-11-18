@@ -1,5 +1,7 @@
 # FloodGuard: An Agentic AI-Based Flood Risk Assessment & Emergency Response Decision Support System
 
+> **Current project status:** See [CURRENT_STATUS.md](CURRENT_STATUS.md) for the implemented baseline, known limitations, real-data recommendation, use-case comparison, and prioritized next steps. See [PHASES.md](PHASES.md) for the delivery plan and [CHANGELOG.md](CHANGELOG.md) for the rationale and usage of material project changes.
+
 > **Major Project Part-1 (15B19CI791)**  
 > **Program:** B.Tech (CSE / ECS / ECE) — 7th Semester / 4th Year (2026–2027)  
 > **Institution:** Jaypee Institute of Information Technology (JIIT), Noida  
@@ -195,7 +197,7 @@ This project is aligned with the **Complex Engineering Problem (WP1–WP7)** and
 cd F:\Projects\floodguard
 
 # Activate virtual environment
-.\venv\Scripts\Activate.ps1
+.\.venv\Scripts\Activate.ps1
 
 # Verify installed packages
 pip list
@@ -227,6 +229,23 @@ cd backend
 python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
 ```
 * Interactive Swagger API Documentation: **`http://127.0.0.1:8000/docs`**
+
+### Step 5: Run Phase 1 tests
+
+```powershell
+cd C:\Users\ishan\Desktop\flood\FloodGuard
+.\.venv\Scripts\Activate.ps1
+python -m pytest backend\tests -q
+```
+
+Expected result: `7 passed`.
+
+### Step 6: Build the frontend
+
+```powershell
+cd C:\Users\ishan\Desktop\flood\FloodGuard\frontend
+npm run build
+```
 
 ---
 

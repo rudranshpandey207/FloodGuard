@@ -8,10 +8,10 @@ High-performance FastAPI service integrating:
 - Environmental Telemetry & Emergency Alert Dispatcher
 """
 
-import os
 import sys
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from .config import settings
 
 if sys.platform == "win32":
     try:
@@ -31,13 +31,13 @@ app = FastAPI(
         "supervised risk prediction, Model Context Protocol (MCP) tools, and human-in-the-loop "
         "emergency decision support."
     ),
-    version="1.0.0"
+    version=settings.app_version
 )
 
 # Enable CORS for local React/Vite development
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins for local prototyping
+    allow_origins=[settings.frontend_origin, "http://127.0.0.1:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -54,8 +54,10 @@ app.include_router(agent_router)
 def root():
     return {
         "system": "FloodGuard Decision Support Platform",
-        "version": "1.0.0",
+        "version": settings.app_version,
         "status": "OPERATIONAL",
+        "data_mode": settings.data_mode,
+        "model_version": settings.model_version,
         "models_active": ["LogisticRegression (Baseline)", "RandomForest", "XGBoost (Champion)"],
         "docs_url": "/docs",
         "endpoints": [
@@ -71,7 +73,12 @@ def root():
 
 @app.get("/api/health")
 def health_check():
-    return {"status": "healthy", "service": "FloodGuard Backend & MCP Engine"}
+    return {
+        "status": "healthy",
+        "service": "FloodGuard Backend & MCP Engine",
+        "data_mode": settings.data_mode,
+        "model_version": settings.model_version,
+    }
 
 
 if __name__ == "__main__":
