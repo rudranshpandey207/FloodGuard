@@ -240,6 +240,27 @@ python -m pytest backend\tests -q
 
 Expected result: `7 passed`.
 
+### Troubleshooting duplicate local servers
+
+If the browser shows **OFFLINE · SYNTHETIC FALLBACK** while `/api/health` is healthy, stop old Vite/Uvicorn processes before restarting:
+
+```powershell
+Get-Process -Name node,python -ErrorAction SilentlyContinue
+```
+
+Stop only the specific stale process identified by the process ID:
+
+```powershell
+Stop-Process -Id <PROCESS_ID> -Force
+```
+
+Use one backend on port `8000` and one frontend on port `5173`:
+
+```powershell
+cd C:\Users\ishan\Desktop\flood\FloodGuard\frontend
+npx vite --host 127.0.0.1 --port 5173 --strictPort
+```
+
 ### Step 6: Build the frontend
 
 ```powershell

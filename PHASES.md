@@ -1,6 +1,6 @@
 # FloodGuard — Delivery Phases
 
-This file is the execution plan for completing the synthetic-data demonstration application. The current work is **Phase 1**.
+This file is the execution plan for completing the synthetic-data demonstration application. **Phase 1 is complete**, **Phase 2 is complete**, **Phase 3 is complete**, and the current work is **Phase 4**.
 
 ## Phase 1 — Stabilize the Existing Foundation
 
@@ -35,6 +35,8 @@ This file is the execution plan for completing the synthetic-data demonstration 
 - Historical telemetry API and real charts.
 - Refresh, export, and station navigation actions.
 - Responsive and accessible operator interface.
+
+**Phase 2 started:** The overview map is being converted from a schematic visualization to a real interactive Leaflet map with filterable station markers.
 
 **Exit criteria:**
 
@@ -71,6 +73,8 @@ This file is the execution plan for completing the synthetic-data demonstration 
 - Local incident lifecycle and audit timeline.
 - Preparedness panels and human approval gates.
 - Explicit separation of AI advice, official warnings, and approved actions.
+
+**Phase 4 started:** Incidents now persist in SQLite and support human Open → Investigating → Acknowledged → Resolved transitions with audit entries.
 
 **Exit criteria:**
 

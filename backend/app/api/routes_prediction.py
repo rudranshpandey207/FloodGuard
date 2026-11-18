@@ -39,6 +39,15 @@ class PredictionRequest(BaseModel):
             raise ValueError(f"unknown feature override(s): {', '.join(sorted(unknown))}")
         if any(not math.isfinite(number) for number in value.values()):
             raise ValueError("feature overrides must contain finite numbers")
+        nonnegative_features = {
+            "rainfall_1h_mm", "rainfall_24h_mm", "rainfall_72h_mm", "rainfall_7d_mm",
+            "upstream_discharge_cusecs", "elevation_m", "drainage_capacity",
+            "temperature_c", "humidity_pct", "runoff_potential_index", "drainage_strain_index",
+        }
+        if any(value[name] < 0 for name in nonnegative_features if name in value):
+            raise ValueError("these feature overrides must be non-negative")
+        if "soil_moisture_index" in value and not 0 <= value["soil_moisture_index"] <= 1:
+            raise ValueError("soil_moisture_index must be between 0 and 1")
         return value
 
 
@@ -61,6 +70,8 @@ def run_model_prediction(payload: PredictionRequest):
         raise HTTPException(status_code=400, detail=res["error"])
     res["data_mode"] = settings.data_mode
     res["model_version"] = settings.model_version
+    res["scenario_mode"] = bool(payload.feature_override)
+    res["feature_overrides"] = payload.feature_override or {}
     return res
 
 

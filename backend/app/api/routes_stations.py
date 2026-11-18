@@ -41,6 +41,73 @@ def get_all_stations():
     return _get_stations()
 
 
+@router.get("/network/history")
+def get_network_history():
+    """Returns a deterministic synthetic 24-hour network-average series."""
+    stations = _get_stations()
+    if not stations:
+        return {"data_mode": "synthetic", "data_source": "deterministic-demo-generator", "series": []}
+
+    series = []
+    for hour in range(24, -1, -1):
+        progress = (24 - hour) / 24
+        normalized_levels = []
+        rainfall_values = []
+        for index, station in enumerate(stations):
+            telemetry = station["current_telemetry"]
+            current_level = float(telemetry["river_water_level_m"])
+            station_drift = 0.18 + (index % 4) * 0.08
+            normalized_levels.append(current_level - station_drift * (1 - progress) - 0.04 * (progress ** 2))
+            rainfall_values.append(float(telemetry["rainfall_24h_mm"]) * progress)
+
+        series.append({
+            "minutes_from_now": -hour * 60,
+            "time_label": f"-{hour}h" if hour else "NOW",
+            "average_water_level_m": round(sum(normalized_levels) / len(normalized_levels), 3),
+            "average_rainfall_cumulative_mm": round(sum(rainfall_values) / len(rainfall_values), 2),
+            "quality": "synthetic",
+        })
+
+    return {
+        "data_mode": "synthetic",
+        "data_source": "deterministic-demo-generator",
+        "station_count": len(stations),
+        "series": series,
+    }
+
+
+@router.get("/{station_id}/history")
+def get_station_history(station_id: str):
+    """Returns deterministic synthetic 24-hour chart samples for demonstration UI use."""
+    stations = _get_stations()
+    target = next((station for station in stations if station["station_id"].lower() == station_id.lower()), None)
+    if not target:
+        raise HTTPException(status_code=404, detail="Station not found")
+
+    telemetry = target["current_telemetry"]
+    current_level = float(telemetry["river_water_level_m"])
+    rainfall = float(telemetry["rainfall_24h_mm"])
+    samples = []
+    for hour in range(24, -1, -1):
+        progress = (24 - hour) / 24
+        simulated_level = current_level - ((0.42 * (1 - progress)) + (0.08 * (progress ** 2)))
+        simulated_rain = max(0.0, rainfall * (1 - progress) * (0.65 + 0.35 * ((hour % 5) / 5)))
+        samples.append({
+            "hour_offset": -hour,
+            "river_water_level_m": round(simulated_level, 3),
+            "rainfall_cumulative_mm": round(simulated_rain, 2),
+            "quality": "synthetic",
+        })
+
+    return {
+        "station_id": target["station_id"],
+        "station_name": target["station_name"],
+        "data_mode": "synthetic",
+        "data_source": "deterministic-demo-generator",
+        "series": samples,
+    }
+
+
 @router.get("/{station_id}")
 def get_station_by_id(station_id: str):
     """Retrieve detailed telemetry and historical floods for a specific station."""

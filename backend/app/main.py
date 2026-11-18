@@ -23,6 +23,9 @@ from .api.routes_stations import router as stations_router
 from .api.routes_prediction import router as prediction_router
 from .api.routes_alerts import router as alerts_router
 from .api.routes_agent import router as agent_router
+from .api.routes_integrations import router as integrations_router
+from .api.routes_incidents import router as incidents_router
+from .api.routes_chat import router as chat_router
 
 app = FastAPI(
     title="FloodGuard: Agentic Flood Risk Assessment & Decision Support System",
@@ -48,6 +51,9 @@ app.include_router(stations_router)
 app.include_router(prediction_router)
 app.include_router(alerts_router)
 app.include_router(agent_router)
+app.include_router(integrations_router)
+app.include_router(incidents_router)
+app.include_router(chat_router)
 
 
 @app.get("/")
@@ -62,11 +68,15 @@ def root():
         "docs_url": "/docs",
         "endpoints": [
             "/api/stations",
+            "/api/stations/network/history",
             "/api/prediction/predict",
             "/api/prediction/models",
             "/api/alerts",
             "/api/agent/query",
-            "/api/agent/tools"
+            "/api/agent/tools",
+            "/api/integrations/weather/{station_id}",
+            "/api/incidents",
+            "/api/chat/sessions"
         ]
     }
 

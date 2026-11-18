@@ -5,7 +5,7 @@
 **Repository state:** Academic prototype / local development  
 **Current operational posture:** Demonstrable offline-first dashboard backed by a local FastAPI service; not ready for real emergency operations
 
-**Delivery phase:** Phase 1 — Stabilize the Existing Foundation (**complete**)
+**Delivery phase:** Phase 4 — Agent, Alerts, and Incident Workflow (**in progress**); Phase 1 (**complete**); Phase 2 (**complete**); Phase 3 (**complete**)
 
 Phase execution details are maintained in [PHASES.md](PHASES.md), and implementation rationale is maintained in [CHANGELOG.md](CHANGELOG.md).
 
@@ -125,6 +125,31 @@ The frontend has demo-data fallback so it can be previewed even when FastAPI is 
 - The telemetry chart is currently illustrative SVG data rather than a historical time-series API.
 - Export, station-details, filter, refresh, map zoom, and “View all alerts” controls are primarily presentation controls.
 - The “What-if” simulator described in the original roadmap is not yet implemented.
+
+### Gemini and Phase 2 alert/report increment
+
+- Gemini synthesis is integrated through a project-root ignored `.env` file and remains optional.
+- The configured model is `gemini-3.8-flash`; fallback is the deterministic MCP/model response.
+- Agent responses identify `GEMINI ENHANCED` or `OFFLINE FALLBACK` synthesis.
+- The supplied Gemini key appeared in chat and must be revoked/replaced for security.
+- Overview alert severity filtering and CSV report export are implemented.
+
+### Phase 2 dashboard increment started
+
+- The schematic CSS map has been replaced by a real Leaflet/Carto Dark map.
+- Synthetic station coordinates are displayed as risk-colored circle markers.
+- Selecting a marker updates the selected-station detail panel.
+- The Overview map includes a Low/Medium/High/Critical risk filter and station count.
+- A Delhi/NCR risk question now returns regional affected-station evidence instead of always defaulting to one Old Railway Bridge result.
+- Phase 3 includes a Scenario Lab with baseline-versus-simulated XGBoost prediction, class probabilities, model risk drivers, temperature/humidity controls, local recent-run history, and JSON export.
+- Open-Meteo live-weather preview is available without an API key for temperature, humidity, soil moisture, and rolling precipitation; it does not replace CWC gauge level or official barrage discharge.
+- Scenario overrides recompute derived stage, runoff, and drainage-strain features before model inference.
+- A floating refresh control reloads stations, alerts, and model metadata.
+- The Stations view has live search and risk filtering, a selectable station detail panel, coordinates and thresholds, and a synthetic 24-hour history sparkline.
+- The synthetic history endpoint is explicitly marked as generated demonstration data and not observed telemetry.
+- Phase 4 incidents are persisted in a local SQLite database and can be investigated, acknowledged, or resolved by a human operator.
+- Incident transitions are recorded in an audit table; Gemini/AI output cannot create or resolve incidents without the operator UI/API action.
+- The Overview network telemetry chart now loads a 25-point backend-provided synthetic 24-hour series instead of hardcoded SVG values.
 
 ### 2.5 Phase 1 stabilization completed
 

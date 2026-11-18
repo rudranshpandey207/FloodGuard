@@ -35,6 +35,9 @@ htmlcov/
 .env
 .env.local
 *.env
+*.db
+*.sqlite
+*.sqlite3
 
 # Operating System Files
 .DS_Store

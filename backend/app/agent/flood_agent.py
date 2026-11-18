@@ -24,6 +24,7 @@ from .safety import apply_safety_guardrails
 class FloodIntelligenceAgent:
     def __init__(self):
         self.api_key = os.getenv("GEMINI_API_KEY", "").strip()
+        self.model_name = os.getenv("GEMINI_MODEL", "gemini-3.8-flash").strip()
         self.available_tools = list_tools()
         
     def _extract_location_mention(self, text: str) -> str:
@@ -35,19 +36,139 @@ class FloodIntelligenceAgent:
                 return kw
         return "Delhi"  # Default sentinel station
         
+    def _enhance_with_gemini(self, user_query: str, evidence_text: str) -> tuple[str, str]:
+        """Optionally rewrite the evidence-grounded response; MCP results remain authoritative."""
+        if not self.api_key:
+            return evidence_text, "offline-deterministic"
+
+        try:
+            from google import genai
+            from google.genai import types
+            client = genai.Client(
+                api_key=self.api_key,
+                http_options=types.HttpOptions(timeout=12000),
+            )
+            prompt = (
+                "You are the FloodGuard synthetic-data decision-support assistant. "
+                "Rewrite the following evidence-grounded flood assessment for an emergency-management operator. "
+                "Keep every numeric value, station name, risk tier, recommendation, and safety caveat. "
+                "Do not invent data, external events, or official orders. "
+                "Use concise Markdown headings and bullets. Preserve human-in-the-loop language.\n\n"
+                f"Operator question: {user_query}\n\n"
+                f"Authoritative MCP and model evidence:\n{evidence_text}"
+            )
+            response = client.models.generate_content(model=self.model_name, contents=prompt)
+            enhanced = getattr(response, "text", "").strip()
+            if not enhanced:
+                return evidence_text, "offline-deterministic"
+            return enhanced, "gemini"
+        except Exception:
+            return evidence_text, "offline-deterministic-fallback"
+
     def run_agentic_workflow(self, user_query: str) -> Dict[str, Any]:
         """
         Executes the ReAct loop:
         Query -> Plan -> Tool Execution -> Synthesis -> Guardrails
         """
-        q_lower = user_query.lower()
+        q_lower = user_query.lower().strip()
+
+        greeting_words = {"hey", "hi", "hello", "good morning", "good afternoon", "good evening", "yo", "namaste"}
+        help_phrases = ("what can you do", "how can you help", "help", "capabilities", "features", "options", "who are you")
+        thanks_phrases = ("thank you", "thanks", "great", "appreciate it")
+        is_greeting = q_lower in greeting_words or any(q_lower.startswith(word + " ") for word in greeting_words)
+
+        if is_greeting:
+            return {
+                "query": user_query,
+                "target_location": None,
+                "plan": ["Recognize conversational greeting", "Explain available flood-risk queries", "Invite a station or regional question"],
+                "tool_calls": [],
+                "response": (
+                    "### 👋 Hi — I’m the FloodGuard AI Assistant\n"
+                    "I can help you explore the project’s **synthetic flood-risk data**. You can ask me about:\n"
+                    "- **A location:** `Is Delhi at risk?`, `How is Yamuna at Old Railway Bridge?`, or `What is the risk at Prayagraj?`\n"
+                    "- **River or region:** `Show affected stations`, `How is NCR doing?`, or `Which areas need attention?`\n"
+                    "- **Rainfall and river stage:** `What is the rainfall in Noida?` or `Is water rising in Ghaziabad?`\n"
+                    "- **Flood history:** `Has Delhi flooded before?` or `Show historical floods for Ganga at Haridwar`\n"
+                    "- **Preparedness:** `What should we do for High risk?` or `Give me Critical flood recommendations`\n"
+                    "- **ML predictions:** `Predict flood risk for Yamuna` or `Which factors drive the risk?`\n\n"
+                    "Try: **“Is Delhi at risk?”** or **“Which stations need immediate attention?”**"
+                ),
+                "risk_tier": None,
+                "safety_filtered": True,
+                "synthesis_source": "offline-deterministic",
+                "gemini_enabled": False,
+            }
+
+        if any(phrase in q_lower for phrase in help_phrases):
+            return {
+                "query": user_query,
+                "target_location": None,
+                "plan": ["Identify help request", "Present supported query types", "Provide example prompts"],
+                "tool_calls": [],
+                "response": (
+                    "### 🌊 How I Can Help\n"
+                    "I work with FloodGuard’s **synthetic station telemetry**, XGBoost model, and MCP tools.\n"
+                    "#### I can answer questions about:\n"
+                    "- **All stations:** `Which stations need immediate attention?` or `Show all affected regions`\n"
+                    "- **Delhi/NCR:** `Is Delhi at risk?`, `Is Yamuna in Delhi safe?`, or `Summarize Okhla Barrage risk`\n"
+                    "- **Hindon:** `How is Ghaziabad?` or `What is the risk at Noida Sector 135?`\n"
+                    "- **Ganga:** `Check Haridwar`, `What is the risk at Prayagraj?`, or `Show Ganga historical flood history`\n"
+                    "- **Specific hydrology:** rainfall totals, river level, danger mark, rate of rise, discharge, soil saturation, and model drivers\n"
+                    "- **Preparedness:** recommendations for Low, Medium, High, or Critical risk\n\n"
+                    "#### Important\n"
+                    "These responses use demonstration data—not real-time emergency observations—and remain advisory."
+                ),
+                "risk_tier": None,
+                "safety_filtered": True,
+                "synthesis_source": "offline-deterministic",
+                "gemini_enabled": False,
+            }
+
+        if any(phrase in q_lower for phrase in thanks_phrases):
+            return {
+                "query": user_query,
+                "target_location": None,
+                "plan": ["Recognize appreciation", "Invite another flood-risk task"],
+                "tool_calls": [],
+                "response": "You’re welcome! I can next check a station, compare affected regions, explain an assessment, or list preparedness actions. What would you like to investigate?",
+                "risk_tier": None,
+                "safety_filtered": True,
+                "synthesis_source": "offline-deterministic",
+                "gemini_enabled": False,
+            }
+
+        known_locations = ("delhi", "yamuna", "noida", "okhla", "hindon", "ghaziabad", "haridwar", "prayagraj", "ganga")
+        risk_or_hydrology_terms = ("risk", "affected", "stations", "rain", "rainfall", "level", "flood", "danger", "warning", "predict", "history", "recommend", "prepared", "discharge", "soil")
+        regional_terms = ("all", "overview", "overall", "region", "ncr")
+
+        if not any(word in q_lower for word in known_locations) and not any(word in q_lower for word in risk_or_hydrology_terms) and not any(word in q_lower for word in regional_terms):
+            return {
+                "query": user_query,
+                "target_location": None,
+                "plan": ["Recognize unclear or unsupported request", "Offer supported FloodGuard query examples"],
+                "tool_calls": [],
+                "response": (
+                    "### 💬 I’m ready to help\n"
+                    "I’m a flood-risk assistant rather than a general chatbot. Try asking about a **station or river**, for example:\n"
+                    "- `Is Delhi at risk?`\n- `Show affected stations`\n- `What is the rainfall at Yamuna?`\n- `Show historical floods for Ganga`\n- `Give me High risk preparedness actions`"
+                ),
+                "risk_tier": None,
+                "safety_filtered": True,
+                "synthesis_source": "offline-deterministic",
+                "gemini_enabled": False,
+            }
+
         location = self._extract_location_mention(user_query)
-        
         plan_steps = []
         tool_calls_executed = []
         
         # 1. Plan Formation based on user intent
-        if any(w in q_lower for w in ["affected", "all stations", "overview", "overall", "regions"]):
+        regional_delhi_query = (
+            ("delhi" in q_lower or "ncr" in q_lower)
+            and any(w in q_lower for w in ["risk", "at risk", "affected", "stations", "safe", "danger"])
+        )
+        if any(w in q_lower for w in ["affected", "all stations", "overview", "overall", "regions"]) or regional_delhi_query:
             plan_steps = [
                 "Survey all active river monitoring stations across Yamuna, Hindon, and Ganga basins",
                 "Filter stations currently approaching or breaching Warning / Danger marks",
@@ -163,7 +284,7 @@ class FloodIntelligenceAgent:
                 "\n#### 🔍 Contributing Risk Drivers Identified by Model:",
             ]
             for driver in res_pred.get("primary_risk_drivers", []):
-                lines.append(f"- • {driver}")
+                lines.append(f"- {driver}")
                 
             lines.append("\n#### 📜 Historical Precedence:")
             for h in res_hist.get("historical_events", [])[:2]:
@@ -176,8 +297,10 @@ class FloodIntelligenceAgent:
             final_text = "\n".join(lines)
             risk_tier = pred_label
 
-        # Apply Human-in-the-Loop Safety Filter
-        safe_response = apply_safety_guardrails(final_text, risk_level=risk_tier)
+        enhanced_response, synthesis_source = self._enhance_with_gemini(user_query, final_text)
+
+        # Apply Human-in-the-Loop Safety Filter after optional synthesis.
+        safe_response = apply_safety_guardrails(enhanced_response, risk_level=risk_tier)
         
         return {
             "query": user_query,
@@ -186,7 +309,9 @@ class FloodIntelligenceAgent:
             "tool_calls": tool_calls_executed,
             "response": safe_response,
             "risk_tier": risk_tier,
-            "safety_filtered": True
+            "safety_filtered": True,
+            "synthesis_source": synthesis_source,
+            "gemini_enabled": synthesis_source == "gemini"
         }
 
 

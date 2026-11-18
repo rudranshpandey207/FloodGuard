@@ -1,7 +1,11 @@
 """Runtime configuration for the FloodGuard local demonstration service."""
 
 import os
+from pathlib import Path
 from dataclasses import dataclass
+from dotenv import load_dotenv
+
+load_dotenv(Path(__file__).resolve().parents[2] / ".env")
 
 
 @dataclass(frozen=True)
