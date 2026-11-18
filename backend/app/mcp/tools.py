@@ -223,9 +223,22 @@ def predict_flood_risk(location: Optional[str] = None, feature_override: Optiona
             "drainage_strain_index": (tel["rainfall_72h_mm"] * (1.1 - stn["drainage_capacity"])) / (stn["elevation_m"] * 0.05 + 1.0)
         }
         
-    # Apply any custom scenario overrides (e.g. from what-if sliders)
+    # Apply custom scenario overrides, then recompute all derived hydrological features.
     if feature_override:
         features.update(feature_override)
+
+    if stn:
+        warning_span = max(stn["danger_level_m"] - stn["warning_level_m"], 0.5)
+        current_level = float(features["river_water_level_m"])
+        rainfall_24h = float(features["rainfall_24h_mm"])
+        rainfall_72h = float(features["rainfall_72h_mm"])
+        soil_moisture = float(features["soil_moisture_index"])
+        features["stage_to_warning_ratio"] = (current_level - stn["warning_level_m"]) / warning_span
+        features["stage_to_danger_ratio"] = (current_level - stn["danger_level_m"]) / warning_span
+        features["runoff_potential_index"] = rainfall_24h * soil_moisture
+        features["drainage_strain_index"] = (
+            rainfall_72h * (1.1 - stn["drainage_capacity"])
+        ) / (stn["elevation_m"] * 0.05 + 1.0)
         
     # If no features could be constructed
     if not features:
