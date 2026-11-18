@@ -19,3 +19,6 @@ httpx>=0.27.0
 
 # Agentic AI & Generative Intelligence (Optional live LLM calls)
 google-genai>=0.1.1
+
+# Development and API contract tests
+pytest>=8.0.0
